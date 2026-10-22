@@ -249,3 +249,43 @@ button:active{transform:none!important;filter:none!important}
  .shell:has(.photo-hero) .race-option{min-height:59px}
  .shell:has(.photo-hero) .quick-tool{min-height:78px}
 }
+
+/* Compact calculator: maximize visible controls on one phone viewport */
+@media(max-width:599px){
+ .calculator-screen{padding:12px 14px calc(80px + env(safe-area-inset-bottom));min-height:100dvh}
+ .calculator-screen .brand{margin-bottom:12px}
+ .calculator-screen .pace-symbol{width:40px;height:40px}
+ .calculator-screen .pace-name{font-size:27px}
+ .calculator-screen .pace-credit{font-size:10px}
+ .calculator-screen .pulse-icon{width:19px;height:19px}
+ .calculator-screen>.eyebrow{font-size:9px;letter-spacing:1.5px}
+ .calculator-screen>h2{font-size:22px;line-height:1.2;margin:2px 0 8px}
+ .calculator-screen .panel{padding:12px;border-radius:15px;margin:8px 0}
+ .calculator-screen .field{margin:6px 0 4px;font-size:11px}
+ .calculator-screen .calculator-distances{gap:5px}
+ .calculator-screen .calculator-distances .race-option{min-height:45px;border-radius:9px;padding:4px 2px;gap:1px}
+ .calculator-screen .calculator-distances .race-option strong{font-size:11px}
+ .calculator-screen .calculator-distances .race-option small{font-size:9px}
+ .calculator-screen .grid{gap:7px}
+ .calculator-screen .grid>.action,.calculator-screen .grid>.control{padding:9px 5px;margin-top:0;border-radius:9px;font-size:12px;min-height:39px}
+ .calculator-screen .wheel-grid{margin-top:3px;gap:8px}
+ .calculator-screen .wheel-frame,.calculator-screen .number-wheel-scroll{height:120px}
+ .calculator-screen .number-wheel-scroll{scroll-padding-block:34px}
+ .calculator-screen .number-wheel-scroll::before,.calculator-screen .number-wheel-scroll::after{height:34px}
+ .calculator-screen .wheel-highlight{top:34px;height:52px}
+ .calculator-screen .wheel-option{height:52px;min-height:52px;font-size:24px}
+ .calculator-screen .metric{font-size:30px;line-height:1.15;margin:3px 0 7px}
+ .calculator-screen .tile{padding:9px 11px;border-radius:10px;font-size:11px}
+ .calculator-screen .tile strong{font-size:20px;margin-top:2px}
+ .calculator-screen .panel>.action{padding:10px;margin-top:8px;border-radius:10px;font-size:13px}
+ .calculator-screen .nav{padding:8px 3px calc(8px + env(safe-area-inset-bottom))}
+}
+@media(max-width:599px) and (max-height:740px){
+ .calculator-screen .brand{margin-bottom:7px}
+ .calculator-screen .panel{padding:9px;margin:6px 0}
+ .calculator-screen .wheel-frame,.calculator-screen .number-wheel-scroll{height:104px}
+ .calculator-screen .number-wheel-scroll{scroll-padding-block:26px}
+ .calculator-screen .number-wheel-scroll::before,.calculator-screen .number-wheel-scroll::after{height:26px}
+ .calculator-screen .wheel-highlight{top:26px}
+ .calculator-screen .field{margin:4px 0 3px}
+}
