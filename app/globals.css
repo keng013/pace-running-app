@@ -115,3 +115,19 @@ html,body,button,input,select{font-family:"Noto Sans Thai",Inter,Arial,sans-seri
 .primary-cta{font-family:"Noto Sans Thai",sans-serif;font-weight:750;letter-spacing:-.025em}
 .race-option strong{font-family:Inter,"Noto Sans Thai",sans-serif;font-weight:800}
 .hero-kicker,.section-heading>span{font-family:Inter,sans-serif}
+
+/* Runner identity: continuous controlled running motion, rather than one-time logo pop */
+.brand .logo-bounce{
+ animation:pace-runner-stride 2.4s ease-in-out infinite;
+ transform-origin:50% 75%;
+ will-change:transform;
+ filter:drop-shadow(0 0 0 rgba(203,250,88,0));
+}
+@keyframes pace-runner-stride{
+ 0%,100%{transform:translate3d(0,0,0) rotate(-2deg) scale(1);filter:drop-shadow(0 0 0 rgba(203,250,88,0))}
+ 20%{transform:translate3d(1px,-3px,0) rotate(2deg) scale(1.045)}
+ 42%{transform:translate3d(0,0,0) rotate(-1deg) scale(1)}
+ 65%{transform:translate3d(1px,-2px,0) rotate(2deg) scale(1.04);filter:drop-shadow(0 0 7px rgba(203,250,88,.32))}
+ 85%{transform:translate3d(0,0,0) rotate(-1deg) scale(1)}
+}
+@media(prefers-reduced-motion:reduce){.brand .logo-bounce{animation:none;will-change:auto}}
