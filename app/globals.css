@@ -209,3 +209,16 @@ button:active{transform:none!important;filter:none!important}
 .wheel-neighbor:disabled{opacity:.25}
 .number-wheel-group>.field{margin:8px 0}
 @media(prefers-reduced-motion:reduce){button{transition:none!important}}
+
+/* Hero composition refinement: slightly taller, better runner framing */
+@media(max-width:599px){
+ .shell:has(.photo-hero) .photo-hero{
+   height:clamp(430px,123vw,535px);
+   background-position:center,66% 42%;
+   background-size:cover,cover;
+ }
+ .shell:has(.photo-hero) .hero-copy{bottom:30px}
+ .shell:has(.photo-hero) .hero-photo-shade{
+   background:linear-gradient(180deg,rgba(2,12,17,.25) 0%,transparent 26%,rgba(1,10,14,.05) 44%,rgba(1,10,14,.37) 73%,#061115 100%);
+ }
+}
