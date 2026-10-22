@@ -153,6 +153,10 @@ const academyLessons = [
    caution:"อย่าทดลองเจลหรือรองเท้าคู่ใหม่วันแข่งขัน ปริมาณน้ำและพลังงานต้องปรับตามเวลา อากาศ และความทนของแต่ละคน"},
 ];
 
+const vo2=(v:number)=>-4.60+0.182258*v+0.000104*v*v;
+const fraction=(t:number)=>0.8+0.1894393*Math.exp(-0.012778*t)+0.2989558*Math.exp(-0.1932605*t);
+const vdot=(km:number,sec:number)=>sec>0?vo2(km*60000/sec)/fraction(sec/60):0;
+const trainingPace=(score:number,ratio:number)=>{let lo=0,hi=600;for(let i=0;i<50;i++){const mid=(lo+hi)/2;if(vo2(mid)<score*ratio)lo=mid;else hi=mid;}return formatPace(60000/((lo+hi)/2));};
 export default function Page() {
   const [tab, setTab] = useState<Tab>("home");
   const [distance, setDistance] = useState(21.0975);
@@ -168,6 +172,17 @@ export default function Page() {
   const [knownMinutes, setKnownMinutes] = useState(55);
   const [knownSeconds, setKnownSeconds] = useState(0);
 
+  const [trainingTool,setTrainingTool]=useState<"vdot"|"heart">("vdot");
+  const [testKm,setTestKm]=useState(10);
+  const [testHours,setTestHours]=useState(0);
+  const [testMinutes,setTestMinutes]=useState(50);
+  const [testSeconds,setTestSeconds]=useState(0);
+  const [age,setAge]=useState(38);
+  const [restHr,setRestHr]=useState(60);
+  const [maxHrInput,setMaxHrInput]=useState(0);
+  const [hrMethod,setHrMethod]=useState<"max"|"hrr">("max");
+  const score=vdot(testKm,testHours*3600+testMinutes*60+testSeconds);
+  const maxHr=maxHrInput||220-age;
   const inputPace = minutes * 60 + seconds;
   const targetSeconds = hours * 3600 + finishMinutes * 60 + finishSecs;
   const valid = mode === "pace" ? inputPace > 0 : targetSeconds > 0;
@@ -309,6 +324,46 @@ export default function Page() {
           <>
             <div className="eyebrow">TRAIN SMARTER</div>
             <h2>Training Planner</h2>
+            <div className="training-switch">
+              <button className={trainingTool==="vdot"?"selected":""} onClick={()=>setTrainingTool("vdot")}>VDOT Test</button>
+              <button className={trainingTool==="heart"?"selected":""} onClick={()=>setTrainingTool("heart")}>Heart Rate Zones</button>
+            </div>
+            {trainingTool==="vdot"?<section className="training-tool-card">
+              <span className="academy-overline">RUNNING PERFORMANCE</span><h3>VDOT Running Calculator</h3>
+              <p className="muted">ประเมินสมรรถภาพจากผลงานการแข่งขันด้วยสมการ Daniels–Gilbert</p>
+              <label className="field" htmlFor="test-distance">ระยะทางการแข่งขัน</label>
+              <select id="test-distance" className="control" value={testKm} onChange={e=>setTestKm(Number(e.target.value))}>
+                {distances.filter(d=>d.km>=3).map(d=><option key={d.km} value={d.km}>{d.label}</option>)}
+              </select>
+              <label className="field">เวลาที่ทำได้ (ชั่วโมง : นาที : วินาที)</label>
+              <div className="wheel-grid three predictor-wheels">
+                <NumberWheel label="ชั่วโมง" value={testHours} max={23} onChange={setTestHours}/>
+                <NumberWheel label="นาที" value={testMinutes} max={59} onChange={setTestMinutes}/>
+                <NumberWheel label="วินาที" value={testSeconds} max={59} onChange={setTestSeconds}/>
+              </div>
+              {score>=15&&score<=90&&testHours*3600+testMinutes*60+testSeconds>=180?<>
+                <div className="training-result"><span>ESTIMATED VDOT</span><strong>{score.toFixed(1)}</strong><small>ค่าประเมินจากผลงาน ไม่ใช่การตรวจวัด VO₂max โดยตรง</small></div>
+                <h4>Training Paces (ประมาณ)</h4>
+                {([["Easy","Easy / Recovery",.68],["Marathon","Marathon effort",.82],["Threshold","Tempo",.88],["Interval","Intervals",.98]] as const).map(([name,description,ratio])=>
+                  <div className="training-zone" key={name}><div><strong>{name}</strong><small>{description}</small></div><b>{trainingPace(score,ratio)}<small> /km</small></b></div>)}
+              </>:<p className="muted">กรอกเวลาตั้งแต่ 3 นาที และผล VDOT ในช่วง 15–90 เพื่อแสดงผล</p>}
+              <p className="small muted">เพซฝึกเป็นค่าประมาณจากสมการและสัดส่วนการใช้ออกซิเจน ไม่ใช่ตาราง VDOT ทางการของ Jack Daniels ควรปรับตามสภาพจริง</p>
+            </section>:<section className="training-tool-card">
+              <span className="academy-overline">TRAIN BY EFFORT</span><h3>Heart Rate Zone Calculator</h3>
+              <p className="muted">เลือกวิธี %Max HR หรือ Karvonen (%Heart Rate Reserve)</p>
+              <div className="training-input-row"><label>อายุ (ปี)<input className="control" type="number" min={12} max={100} value={age} onChange={e=>setAge(clamp(e.target.value,12,100))}/></label>
+              <label>Resting HR<input className="control" type="number" min={30} max={150} value={restHr} onChange={e=>setRestHr(clamp(e.target.value,30,150))}/></label></div>
+              <label className="field" htmlFor="max-heart">Max HR ที่วัดได้ (ถ้าทราบ)</label>
+              <input id="max-heart" className="control" type="number" min={0} max={230} placeholder="เว้นว่างเพื่อใช้ 220 − อายุ" value={maxHrInput||""} onChange={e=>setMaxHrInput(clamp(e.target.value,0,230))}/>
+              <div className="training-switch"><button className={hrMethod==="max"?"selected":""} onClick={()=>setHrMethod("max")}>% Max HR</button><button className={hrMethod==="hrr"?"selected":""} onClick={()=>setHrMethod("hrr")}>Karvonen %HRR</button></div>
+              {maxHr>=100&&maxHr<=230&&(hrMethod==="max"||restHr<maxHr)?<>
+                <div className="training-result"><span>{maxHrInput?"MEASURED":"ESTIMATED"} MAX HR</span><strong>{maxHr}<small> bpm</small></strong><small>{maxHrInput?"ใช้ค่าที่กรอก":"คำนวณ 220 − อายุ (เป็นเพียงค่าประมาณ)"}</small></div>
+                {([["Z1","Recovery",.5,.6],["Z2","Easy",.6,.7],["Z3","Aerobic",.7,.8],["Z4","Threshold",.8,.9],["Z5","High intensity",.9,1]] as const).map(([zone,name,low,high])=>
+                  <div className="training-zone" key={zone}><div><strong>{zone} · {name}</strong><small>{Math.round(low*100)}–{Math.round(high*100)}% {hrMethod==="hrr"?"HRR":"Max HR"}</small></div><b>{Math.round(hrMethod==="hrr"?restHr+(maxHr-restHr)*low:maxHr*low)}–{Math.round(hrMethod==="hrr"?restHr+(maxHr-restHr)*high:maxHr*high)}<small> bpm</small></b></div>)}
+              </>:<p className="muted">กรุณาตรวจสอบค่า Max HR และ Resting HR</p>}
+              <p className="small muted">โซนเป็นค่าประมาณ ควรใช้ RPE และ Talk Test ร่วมด้วย ไม่ใช่คำแนะนำทางการแพทย์</p>
+            </section>}
+            <div className="section-heading"><h3>ตัวอย่างตารางซ้อม</h3><span>WEEKLY PLAN</span></div>
             <p className="muted">ตัวอย่างโครงสร้างสัปดาห์ซ้อม (ไม่ใช่แผนเฉพาะบุคคล)</p>
             {[
               ["MON", "Recovery / Rest"], ["TUE", "Easy Run · 40 min"],
