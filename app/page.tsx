@@ -142,7 +142,7 @@ export default function Page() {
 
   return (
     <>
-      <main className="shell">
+      <main className={`shell ${tab === "calculator" ? "calculator-screen" : ""}`}>
         <header className="brand">
           <span className="logo pace-lockup">
             <Image src="/pace-mark.svg" alt="PACE runner logo" width={60} height={60} className="logo-bounce pace-symbol" />
