@@ -325,22 +325,32 @@ export default function Page() {
           <>
             <div className="eyebrow">RUNNING SCIENCE</div>
             <h2>Running Academy</h2>
-            <p className="academy-intro">คู่มือการฝึกวิ่งตั้งแต่พื้นฐานจนถึงการเตรียมแข่งขัน เลือกหัวข้อเพื่ออ่านวิธีฝึก ตัวอย่างเซสชัน และข้อควรระวัง</p>
-            {academyLessons.map((lesson, index) => (
-              <details className="academy-lesson" key={lesson.title}>
-                <summary>
-                  <span className="academy-index">{String(index + 1).padStart(2, "0")}</span>
-                  <span className="academy-summary-text"><strong>{lesson.title}</strong><small>{lesson.summary}</small></span>
-                  <span className="academy-chevron" aria-hidden="true">⌄</span>
-                </summary>
-                <div className="academy-body">
-                  <h4>หลักการ</h4><p>{lesson.principle}</p>
-                  <h4>ตัวอย่างการฝึก</h4><p>{lesson.session}</p>
-                  <h4>ความหนักที่เหมาะสม</h4><p>{lesson.intensity}</p>
-                  <h4>ข้อควรระวัง</h4><p>{lesson.caution}</p>
-                </div>
-              </details>
-            ))}
+            <section className="academy-feature">
+              <span className="academy-feature-kicker">PACE KNOWLEDGE HUB <span>• 07 LESSONS</span></span>
+              <div className="academy-feature-title"><span className="academy-feature-icon"><BookOpen size={25} strokeWidth={1.8} /></span><h3>วิ่งอย่างเข้าใจ<br /><em>พัฒนาอย่างมีเป้าหมาย</em></h3></div>
+              <p>เรียนรู้หลักการฝึกที่นำไปใช้ได้จริง ตั้งแต่การสร้างฐานความฟิต ไปจนถึงการเตรียมแข่งขัน</p>
+              <div className="academy-feature-tags"><span>TRAIN SMART</span><span>RECOVER WELL</span><span>RACE READY</span></div>
+            </section>
+            <div className="academy-list-heading"><div><span className="academy-overline">LEARNING PATH</span><h3>บทเรียนทั้งหมด</h3></div><span className="academy-count">7 TOPICS</span></div>
+            {academyLessons.map((lesson, index) => {
+              const icons = [Activity, Flag, Activity, Activity, CalendarDays, Activity, Flag];
+              const LessonIcon = icons[index];
+              return (
+                <details className="academy-lesson" key={lesson.title}>
+                  <summary>
+                    <span className="academy-topic-icon"><LessonIcon size={20} strokeWidth={1.8} /></span>
+                    <span className="academy-summary-text"><span className="academy-topic-number">LESSON {String(index + 1).padStart(2, "0")}</span><strong>{lesson.title}</strong><small>{lesson.summary}</small></span>
+                    <span className="academy-chevron" aria-hidden="true">⌄</span>
+                  </summary>
+                  <div className="academy-body">
+                    <div className="academy-section"><span className="academy-section-heading"><span className="academy-section-dot" />หลักการฝึก</span><p>{lesson.principle}</p></div>
+                    <div className="academy-section"><span className="academy-section-heading"><span className="academy-section-dot" />ตัวอย่างเซสชัน</span><p>{lesson.session}</p></div>
+                    <div className="academy-section"><span className="academy-section-heading"><span className="academy-section-dot" />ระดับความหนัก</span><p>{lesson.intensity}</p></div>
+                    <div className="academy-caution"><strong>ข้อควรระวัง</strong><p>{lesson.caution}</p></div>
+                  </div>
+                </details>
+              );
+            })}
             <p className="small muted">คำแนะนำเพื่อการศึกษาทั่วไป ปรับความหนักตามสมรรถภาพและประวัติสุขภาพ หากมีอาการเจ็บหน้าอก หน้ามืด หรือปวดผิดปกติให้หยุดออกกำลังกายและปรึกษาบุคลากรทางการแพทย์</p>
           </>
         )}
