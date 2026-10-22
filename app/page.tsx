@@ -126,7 +126,9 @@ export default function Page() {
   const [finishSecs, setFinishSecs] = useState(8);
   const [strategy, setStrategy] = useState<Strategy>("even");
   const [knownDistance, setKnownDistance] = useState(10);
+  const [knownHours, setKnownHours] = useState(0);
   const [knownMinutes, setKnownMinutes] = useState(55);
+  const [knownSeconds, setKnownSeconds] = useState(0);
 
   const inputPace = minutes * 60 + seconds;
   const targetSeconds = hours * 3600 + finishMinutes * 60 + finishSecs;
@@ -309,10 +311,14 @@ export default function Page() {
               <select id="known-distance" className="control" value={knownDistance} onChange={(e) => setKnownDistance(Number(e.target.value))}>
                 {distances.map((d) => <option value={d.km} key={d.km}>{d.label}</option>)}
               </select>
-              <label className="field" htmlFor="known-minutes">เวลาที่ทำได้ (นาที)</label>
-              <input id="known-minutes" className="control" type="number" min={1} value={knownMinutes} onChange={(e) => setKnownMinutes(Math.max(1, Number(e.target.value) || 1))} />
+              <label className="field">เวลาที่ทำได้ (ชั่วโมง : นาที : วินาที)</label>
+              <div className="wheel-grid three predictor-wheels">
+                <NumberWheel label="ชั่วโมง" value={knownHours} max={23} onChange={setKnownHours} />
+                <NumberWheel label="นาที" value={knownMinutes} max={59} onChange={setKnownMinutes} />
+                <NumberWheel label="วินาที" value={knownSeconds} max={59} onChange={setKnownSeconds} />
+              </div>
               <p className="muted">Predicted Marathon</p>
-              <div className="metric lime">{formatTime(predictTime(knownMinutes * 60, knownDistance, 42.195))}</div>
+              <div className="metric lime">{knownHours * 3600 + knownMinutes * 60 + knownSeconds > 0 ? formatTime(predictTime(knownHours * 3600 + knownMinutes * 60 + knownSeconds, knownDistance, 42.195)) : "—"}</div>
               <p className="small muted">Riegel estimate; actual results depend on training, conditions and endurance.</p>
             </div>
           </>
