@@ -234,3 +234,18 @@ button:active{transform:none!important;filter:none!important}
 .wheel-option:active{opacity:1}
 .wheel-grid.three{gap:7px}
 @media(prefers-reduced-motion:reduce){.number-wheel-scroll{scroll-behavior:auto}.wheel-option{transition:none}}
+
+/* Compact home hero: expose race choices and tools above the fold */
+@media(max-width:599px){
+ .shell:has(.photo-hero) .photo-hero{
+   height:clamp(305px,86vw,370px);
+   background-position:center,68% 44%;
+ }
+ .shell:has(.photo-hero) .hero-copy{bottom:15px}
+ .shell:has(.photo-hero) .hero-copy h1{font-size:clamp(28px,7.8vw,36px);margin:7px 0}
+ .shell:has(.photo-hero) .hero-copy p{font-size:12px}
+ .shell:has(.photo-hero) .primary-cta{min-height:48px;margin-bottom:13px}
+ .shell:has(.photo-hero) .section-heading{margin-top:12px;margin-bottom:8px}
+ .shell:has(.photo-hero) .race-option{min-height:59px}
+ .shell:has(.photo-hero) .quick-tool{min-height:78px}
+}
