@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Activity, Calculator, CalendarDays, BookOpen, UserRound, Flag, Home } from "lucide-react";
 import { distances, finishSeconds, formatPace, formatTime, predictTime, splits } from "@/lib/pace";
@@ -28,49 +28,88 @@ type NumberWheelProps = {
   onChange: (value: number) => void;
 };
 
+const WHEEL_ITEM_HEIGHT = 52;
+
 function NumberWheel({ label, value, max, onChange }: NumberWheelProps) {
-  const touchStart = useRef<number | null>(null);
-  const wheelDelta = useRef(0);
-  const move = (steps: number) => onChange(Math.max(0, Math.min(max, value + steps)));
+  const listRef = useRef<HTMLDivElement>(null);
+  const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const currentValue = useRef(value);
+  const isInteracting = useRef(false);
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list || isInteracting.current) return;
+    if (Math.abs(list.scrollTop - value * WHEEL_ITEM_HEIGHT) > 1) {
+      list.scrollTo({ top: value * WHEEL_ITEM_HEIGHT, behavior: "instant" });
+    }
+    currentValue.current = value;
+  }, [value]);
+
+  useEffect(() => () => {
+    if (settleTimer.current) clearTimeout(settleTimer.current);
+  }, []);
+
+  const select = (next: number, smooth = true) => {
+    const selected = Math.max(0, Math.min(max, next));
+    currentValue.current = selected;
+    isInteracting.current = false;
+    if (settleTimer.current) clearTimeout(settleTimer.current);
+    listRef.current?.scrollTo({
+      top: selected * WHEEL_ITEM_HEIGHT,
+      behavior: smooth ? "smooth" : "instant",
+    });
+    onChange(selected);
+  };
+
+  const handleScroll = () => {
+    const list = listRef.current;
+    if (!list) return;
+    isInteracting.current = true;
+    if (settleTimer.current) clearTimeout(settleTimer.current);
+    settleTimer.current = setTimeout(() => {
+      const selected = Math.max(0, Math.min(max, Math.round(list.scrollTop / WHEEL_ITEM_HEIGHT)));
+      isInteracting.current = false;
+      currentValue.current = selected;
+      list.scrollTo({ top: selected * WHEEL_ITEM_HEIGHT, behavior: "smooth" });
+      onChange(selected);
+    }, 110);
+  };
+
   return (
     <div className="number-wheel-group">
-      <span className="field">{label}</span>
-      <div
-        className="number-wheel"
-        role="spinbutton"
-        aria-label={label}
-        aria-valuemin={0}
-        aria-valuemax={max}
-        aria-valuenow={value}
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
-          if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
-          if (e.key === "PageUp") { e.preventDefault(); move(-5); }
-          if (e.key === "PageDown") { e.preventDefault(); move(5); }
-        }}
-        onWheel={(e) => {
-          wheelDelta.current += e.deltaY;
-          if (Math.abs(wheelDelta.current) >= 24) {
-            move(wheelDelta.current > 0 ? 1 : -1);
-            wheelDelta.current = 0;
-          }
-        }}
-        onTouchStart={(e) => { touchStart.current = e.touches[0].clientY; }}
-        onTouchEnd={(e) => {
-          if (touchStart.current === null) return;
-          const distance = touchStart.current - e.changedTouches[0].clientY;
-          if (Math.abs(distance) > 12) move(Math.round(distance / 36) || (distance > 0 ? 1 : -1));
-          touchStart.current = null;
-        }}
-      >
-        <button type="button" className="wheel-neighbor" disabled={value === 0} onClick={() => move(-1)} aria-label={`ลด${label}`}>
-          {value > 0 ? String(value - 1).padStart(2, "0") : " "}
-        </button>
-        <div className="wheel-selected">{String(value).padStart(2, "0")}</div>
-        <button type="button" className="wheel-neighbor" disabled={value === max} onClick={() => move(1)} aria-label={`เพิ่ม${label}`}>
-          {value < max ? String(value + 1).padStart(2, "0") : " "}
-        </button>
+      <span className="field" id={`wheel-label-${label}`}>{label}</span>
+      <div className="wheel-frame">
+        <div className="wheel-highlight" aria-hidden="true" />
+        <div
+          className="number-wheel-scroll"
+          ref={listRef}
+          role="spinbutton"
+          aria-label={label}
+          aria-valuemin={0}
+          aria-valuemax={max}
+          aria-valuenow={value}
+          tabIndex={0}
+          onScroll={handleScroll}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowUp") { e.preventDefault(); select(currentValue.current - 1); }
+            if (e.key === "ArrowDown") { e.preventDefault(); select(currentValue.current + 1); }
+            if (e.key === "PageUp") { e.preventDefault(); select(currentValue.current - 5); }
+            if (e.key === "PageDown") { e.preventDefault(); select(currentValue.current + 5); }
+          }}
+        >
+          {Array.from({ length: max + 1 }, (_, number) => (
+            <button
+              className="wheel-option"
+              type="button"
+              key={number}
+              tabIndex={-1}
+              onClick={() => select(number)}
+              aria-hidden="true"
+            >
+              {String(number).padStart(2, "0")}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
