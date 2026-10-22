@@ -8,10 +8,10 @@
   "description": "Running pace and race strategy companion",
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "/pace-mark.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
