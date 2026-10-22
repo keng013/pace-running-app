@@ -131,3 +131,38 @@ html,body,button,input,select{font-family:"Noto Sans Thai",Inter,Arial,sans-seri
  85%{transform:translate3d(0,0,0) rotate(-1deg) scale(1)}
 }
 @media(prefers-reduced-motion:reduce){.brand .logo-bounce{animation:none;will-change:auto}}
+
+/* Approved visual reference: immersive edge-to-edge home hero with logo OVER the photograph */
+@media(max-width:599px){
+ .shell:has(.photo-hero){position:relative;padding:0 0 108px;background:#061115}
+ .shell:has(.photo-hero) .brand{
+   position:absolute;z-index:3;top:22px;left:22px;right:22px;
+   margin:0;padding:0;align-items:flex-start;
+ }
+ .shell:has(.photo-hero) .brand .logo{font-size:27px!important;line-height:1.08;gap:9px!important;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+ .shell:has(.photo-hero) .brand .logo img{width:49px;height:49px;flex:none}
+ .shell:has(.photo-hero) .brand .logo .small{font-size:11px;letter-spacing:0;color:#dce5e4}
+ .shell:has(.photo-hero) .brand .pulse-icon{margin-top:11px}
+ .shell:has(.photo-hero) .photo-hero{
+   height:clamp(395px,115vw,500px);border:0;border-radius:0;
+   background-position:center,70% center;background-size:cover,cover;
+   box-shadow:none;
+ }
+ .shell:has(.photo-hero) .hero-photo-shade{
+   background:linear-gradient(180deg,rgba(2,12,17,.32) 0%,transparent 27%,rgba(1,10,14,.03) 43%,rgba(1,10,14,.40) 72%,#061115 100%);
+ }
+ .shell:has(.photo-hero) .hero-copy{bottom:25px;left:24px;right:18px}
+ .shell:has(.photo-hero) .hero-copy h1{font-size:clamp(34px,9vw,43px);line-height:1.18;letter-spacing:-.055em;margin:9px 0 11px}
+ .shell:has(.photo-hero) .hero-kicker{font-size:10px;letter-spacing:2.1px;color:#f3f6f4;font-weight:600}
+ .shell:has(.photo-hero) .hero-copy p{font-size:14px;color:#f3f6f4}
+ .shell:has(.photo-hero) .primary-cta{
+   width:calc(100% - 44px);margin:0 22px 20px;
+   min-height:53px;border-radius:12px;box-shadow:0 7px 25px rgba(203,250,88,.11);
+ }
+ .shell:has(.photo-hero) .section-heading{margin:14px 22px 11px}
+ .shell:has(.photo-hero) .section-heading h3{font-size:17px;font-weight:800}
+ .shell:has(.photo-hero) .race-options,.shell:has(.photo-hero) .quick-tools{margin-left:22px;margin-right:22px;gap:7px}
+ .shell:has(.photo-hero) .race-option{min-height:69px}
+ .shell:has(.photo-hero) .quick-tool{min-height:90px;background:#101f25}
+ .shell:has(.photo-hero) .motivation-card{margin:19px 22px}
+}
