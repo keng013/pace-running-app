@@ -289,3 +289,20 @@ button:active{transform:none!important;filter:none!important}
  .calculator-screen .wheel-highlight{top:26px}
  .calculator-screen .field{margin:4px 0 3px}
 }
+
+/* Running Academy reading experience */
+.academy-intro{font-size:13px;color:#b7c8c9;margin:0 0 15px;line-height:1.8}
+.academy-lesson{background:#14242a;border:1px solid #2b4248;border-radius:15px;margin:9px 0;overflow:hidden}
+.academy-lesson[open]{border-color:#526b4c}
+.academy-lesson summary{list-style:none;display:flex;align-items:center;gap:12px;padding:15px 13px;cursor:pointer;min-height:72px}
+.academy-lesson summary::-webkit-details-marker{display:none}
+.academy-index{color:#cbfa58;font:800 13px Inter,sans-serif;min-width:24px}
+.academy-summary-text{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.academy-summary-text strong{font-size:15px;color:#f3f7f5}
+.academy-summary-text small{font-size:11px;color:#9bb0b3;line-height:1.5}
+.academy-chevron{font-size:24px;color:#cbfa58;transition:transform .2s ease}
+.academy-lesson[open] .academy-chevron{transform:rotate(180deg)}
+.academy-body{padding:2px 17px 17px 49px;border-top:1px solid #2b4248}
+.academy-body h4{font-size:13px;color:#cbfa58;margin:14px 0 4px}
+.academy-body p{font-size:13px;color:#d4e0e0;line-height:1.85;margin:0}
+@media(max-width:370px){.academy-body{padding-left:16px}}
