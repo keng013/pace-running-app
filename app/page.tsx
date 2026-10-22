@@ -60,28 +60,38 @@ export default function Page() {
 
         {tab === "home" && (
           <>
-            <div className="hero-art" aria-hidden="true">
-              <div className="track track-one" />
-              <div className="track track-two" />
-              <div className="runner-glow">
-                <Image src="/pace-mark.svg" alt="" width={76} height={76} priority />
+            <section className="photo-hero">
+              <div className="hero-photo-shade" />
+              <div className="hero-copy">
+                <span className="hero-kicker">RUN SMARTER · TRAIN BETTER</span>
+                <h1>วิ่งชัดขึ้น<br /><em>ทุกก้าวมีเป้าหมาย</em></h1>
+                <p>Every pace. Every progress.</p>
               </div>
-              <div className="hero-art-label">EVERY STEP COUNTS <span>↗</span></div>
-            </div>
-            <div className="eyebrow">YOUR RUNNING COMPANION</div>
-            <h1 className="hero">Every pace.<br /><span className="lime">Every progress.</span></h1>
-            <p className="muted">คำนวณเพซ วางแผนการซ้อม และวิ่งสู่เป้าหมายของคุณ</p>
-            <section className="panel">
-              <span className="eyebrow">YOUR TARGET</span>
-              <h2 style={{ marginTop: 12 }}>Half Marathon</h2>
-              <div className="metric lime">{valid ? formatTime(time) : "—"}</div>
-              <p className="muted">Target pace {valid ? formatPace(pace) : "—"} /km</p>
-              <button className="action" onClick={() => changeTab("calculator")}>Calculate Your Pace →</button>
             </section>
-            <div className="grid">
-              <button className="tile" onClick={() => changeTab("training")}>TRAINING<strong>Plans →</strong></button>
-              <button className="tile" onClick={() => changeTab("academy")}>LEARN<strong>Academy →</strong></button>
+            <button className="action primary-cta" onClick={() => changeTab("calculator")}>คำนวณ Pace เลย <span>→</span></button>
+            <div className="section-heading"><h3>เป้าหมายยอดนิยม</h3><span>CHOOSE YOUR RACE</span></div>
+            <div className="race-options">
+              {distances.map((d) => (
+                <button key={d.km} className={distance === d.km ? "race-option selected" : "race-option"} onClick={() => { setDistance(d.km); changeTab("calculator"); }}>
+                  <strong>{d.label === "Half Marathon" ? "Half" : d.label === "Marathon" ? "Marathon" : d.label}</strong>
+                  <small>{d.km}K</small>
+                </button>
+              ))}
             </div>
+            <div className="section-heading"><h3>เครื่องมือยอดนิยม</h3><span>EXPLORE</span></div>
+            <div className="quick-tools">
+              {[
+                { id: "calculator" as Tab, icon: Calculator, label: "Pace Calculator" },
+                { id: "splits" as Tab, icon: Flag, label: "Race Splits" },
+                { id: "training" as Tab, icon: CalendarDays, label: "Training Plan" },
+                { id: "academy" as Tab, icon: BookOpen, label: "Running Academy" },
+              ].map(({ id, icon: Icon, label }) => (
+                <button key={id} className="quick-tool" onClick={() => changeTab(id)}>
+                  <Icon size={22} strokeWidth={1.8} /><span>{label}</span>
+                </button>
+              ))}
+            </div>
+            <div className="motivation-card"><span>“ไม่ใช่แค่เร็วขึ้น<br />แต่แข็งแรงขึ้นในทุกก้าววิ่ง”</span><Activity color="#cbfa58" size={34} /></div>
           </>
         )}
 
@@ -90,10 +100,14 @@ export default function Page() {
             <div className="eyebrow">PACE TOOLS</div>
             <h2>Pace Calculator</h2>
             <div className="panel">
-              <label className="field" htmlFor="distance">ระยะทาง</label>
-              <select id="distance" className="control" value={distance} onChange={(e) => setDistance(Number(e.target.value))}>
-                {distances.map((d) => <option key={d.km} value={d.km}>{d.label}</option>)}
-              </select>
+              <label className="field">ระยะทาง</label>
+              <div className="race-options calculator-distances">
+                {distances.map((d) => (
+                  <button key={d.km} type="button" className={distance === d.km ? "race-option selected" : "race-option"} onClick={() => setDistance(d.km)}>
+                    <strong>{d.label === "Half Marathon" ? "Half" : d.label}</strong><small>{d.km}K</small>
+                  </button>
+                ))}
+              </div>
               <label className="field">วิธีคำนวณ</label>
               <div className="grid">
                 <button type="button" className={mode === "pace" ? "action" : "control"} onClick={() => setMode("pace")}>จาก Pace เฉลี่ย</button>
