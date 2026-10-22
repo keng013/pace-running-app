@@ -222,3 +222,15 @@ button:active{transform:none!important;filter:none!important}
    background:linear-gradient(180deg,rgba(2,12,17,.25) 0%,transparent 26%,rgba(1,10,14,.05) 44%,rgba(1,10,14,.37) 73%,#061115 100%);
  }
 }
+
+/* Native kinetic picker: browser momentum + CSS scroll snap */
+.wheel-frame{height:156px;position:relative;overflow:hidden;border:1px solid #33494e;border-radius:15px;background:linear-gradient(180deg,#0c191e,#1b2d32 50%,#0c191e)}
+.wheel-highlight{position:absolute;top:52px;left:7px;right:7px;height:52px;border-top:1px solid rgba(203,250,88,.25);border-bottom:1px solid rgba(203,250,88,.25);border-radius:8px;background:rgba(203,250,88,.055);pointer-events:none;z-index:1}
+.number-wheel-scroll{height:156px;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scroll-snap-type:y mandatory;scroll-padding-block:52px;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-y;outline:none;mask-image:linear-gradient(to bottom,transparent,#000 31%,#000 69%,transparent)}
+.number-wheel-scroll::-webkit-scrollbar{display:none}
+.number-wheel-scroll::before,.number-wheel-scroll::after{content:"";display:block;height:52px;pointer-events:none}
+.number-wheel-scroll:focus-visible{outline:2px solid #cbfa58;outline-offset:-2px}
+.wheel-option{height:52px;min-height:52px;width:100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;scroll-snap-stop:normal;background:transparent;border:0;border-radius:0;color:#d9e5e4;font:650 27px/1 Inter,Arial,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.7px;transition:color .15s ease}
+.wheel-option:active{opacity:1}
+.wheel-grid.three{gap:7px}
+@media(prefers-reduced-motion:reduce){.number-wheel-scroll{scroll-behavior:auto}.wheel-option{transition:none}}
