@@ -166,3 +166,23 @@ html,body,button,input,select{font-family:"Noto Sans Thai",Inter,Arial,sans-seri
  .shell:has(.photo-hero) .quick-tool{min-height:90px;background:#101f25}
  .shell:has(.photo-hero) .motivation-card{margin:19px 22px}
 }
+
+/* Exact brand lockup composition from reference: symbol left, PACE above KRIT.DEV */
+.brand .pace-lockup{display:flex;align-items:center;gap:13px!important;letter-spacing:normal!important}
+.brand .pace-symbol{display:block;flex:none;width:60px;height:60px;border-radius:16px}
+.brand .pace-wordmark{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;white-space:nowrap}
+.brand .pace-name{font-family:Inter,Arial,sans-serif;font-size:37px;font-weight:900;letter-spacing:1.8px;line-height:1;color:#f6f8f5}
+.brand .pace-credit{font-family:Inter,Arial,sans-serif;font-size:15px;font-weight:500;line-height:1.35;letter-spacing:.1px;color:#cbd4d5}
+@media(max-width:599px){
+ .shell:has(.photo-hero) .brand{top:21px;left:21px;right:22px}
+ .shell:has(.photo-hero) .brand .pace-lockup{gap:12px!important}
+ .shell:has(.photo-hero) .brand .pace-symbol{width:57px!important;height:57px!important}
+ .shell:has(.photo-hero) .brand .pace-name{font-size:35px!important;letter-spacing:1.4px!important}
+ .shell:has(.photo-hero) .brand .pace-credit{font-size:14px;letter-spacing:0}
+ .shell:has(.photo-hero) .brand .pulse-icon{margin-top:12px}
+}
+@media(max-width:360px){
+ .shell:has(.photo-hero) .brand .pace-symbol{width:48px!important;height:48px!important}
+ .shell:has(.photo-hero) .brand .pace-name{font-size:29px!important}
+ .shell:has(.photo-hero) .brand .pace-credit{font-size:12px}
+}
