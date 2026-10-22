@@ -306,3 +306,38 @@ button:active{transform:none!important;filter:none!important}
 .academy-body h4{font-size:13px;color:#cbfa58;margin:14px 0 4px}
 .academy-body p{font-size:13px;color:#d4e0e0;line-height:1.85;margin:0}
 @media(max-width:370px){.academy-body{padding-left:16px}}
+
+/* Premium Running Academy editorial design */
+.academy-feature{position:relative;overflow:hidden;padding:22px 19px 19px;border:1px solid #345044;border-radius:20px;background:radial-gradient(circle at 95% 0%,rgba(203,250,88,.19),transparent 46%),linear-gradient(140deg,#19312e,#0c1c21 78%);margin:8px 0 25px}
+.academy-feature:after{content:"";position:absolute;width:145px;height:145px;border:1px solid rgba(203,250,88,.13);border-radius:50%;right:-69px;bottom:-86px;pointer-events:none}
+.academy-feature-kicker{font:750 10px/1.4 Inter,sans-serif;letter-spacing:1.6px;color:#cbfa58}
+.academy-feature-kicker span{color:#b1c5bb;letter-spacing:1px}
+.academy-feature-title{display:flex;gap:13px;align-items:center;margin:18px 0 10px}
+.academy-feature-icon{width:46px;height:46px;display:grid;place-items:center;flex:none;border-radius:14px;background:#cbfa58;color:#0b1b19}
+.academy-feature-title h3{margin:0;font-size:22px;line-height:1.35;letter-spacing:-.5px;font-weight:850}
+.academy-feature-title em{color:#cbfa58;font-style:normal}
+.academy-feature>p{font-size:13px;line-height:1.85;color:#c2d3d0;margin:10px 0 18px}
+.academy-feature-tags{display:flex;flex-wrap:wrap;gap:6px}
+.academy-feature-tags span{font:700 9px Inter,sans-serif;letter-spacing:.5px;color:#d0e5d5;padding:7px 9px;border:1px solid #39564a;border-radius:30px;background:rgba(12,30,29,.5)}
+.academy-list-heading{display:flex;justify-content:space-between;align-items:end;margin:0 2px 12px}
+.academy-overline{font:700 10px Inter,sans-serif;letter-spacing:1.5px;color:#cbfa58}
+.academy-list-heading h3{font-size:19px;margin:4px 0 0}
+.academy-count{font:700 10px Inter,sans-serif;color:#8ea6a8;letter-spacing:1px}
+.academy-lesson{border-radius:15px;margin:9px 0;background:#102127;border-color:#294047}
+.academy-lesson[open]{background:#12252a;border-color:#587953}
+.academy-lesson summary{gap:12px;padding:15px 13px;min-height:86px}
+.academy-topic-icon{width:43px;height:43px;border-radius:12px;display:grid;place-items:center;flex:none;background:#203831;color:#cbfa58;border:1px solid #355144}
+.academy-topic-number{font:750 9px Inter,sans-serif;letter-spacing:1.4px;color:#a2c582}
+.academy-summary-text{gap:3px}
+.academy-summary-text strong{font-size:15px;line-height:1.35}
+.academy-summary-text small{font-size:11px;color:#a8bcbe;line-height:1.5}
+.academy-chevron{font-size:22px;transition:transform .2s ease}
+.academy-body{padding:16px 15px 17px;border-top:1px solid #30454a}
+.academy-section{margin-bottom:17px}
+.academy-section-heading{display:flex;align-items:center;gap:8px;color:#cbfa58;font-size:12px;font-weight:800}
+.academy-section-dot{width:6px;height:6px;background:#cbfa58;border-radius:50%}
+.academy-section p{margin:6px 0 0 14px;font-size:13px;line-height:1.95;color:#d1e0df}
+.academy-caution{border:1px solid #5a4934;background:#29271f;border-radius:11px;padding:12px 13px;margin-top:6px}
+.academy-caution strong{font-size:12px;color:#f2cb83}
+.academy-caution p{font-size:12px;line-height:1.85;color:#e0d6c4;margin:5px 0 0}
+@media(max-width:360px){.academy-feature{padding:17px 14px}.academy-feature-title h3{font-size:19px}.academy-lesson summary{gap:9px;padding:12px 10px}.academy-topic-icon{width:38px;height:38px}}
