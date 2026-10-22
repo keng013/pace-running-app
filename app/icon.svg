@@ -1,1 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#CBFA58"/><g fill="#101B20"><circle cx="77" cy="25" r="10"/><path d="m56 40 17-6 12 13 17-4 3 10-24 7-12-11-9 18 17 12-8 27-12-3 6-19-17-13-15 20-10-7 21-29 8-19-16 7-11 17-9-6 15-24z"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title id="title">PACE running icon</title>
+<rect width="128" height="128" rx="27" fill="#C9F951"/>
+<g fill="none" stroke="#091316" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M56 53 72 43 86 56 102 49"/>
+<path d="M56 53 43 49 31 66"/>
+<path d="M72 43 62 70 80 83 66 106"/>
+<path d="M62 70 49 82 36 104"/>
+</g>
+<circle cx="79" cy="28" r="9" fill="#091316"/>
+</svg>
