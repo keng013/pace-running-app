@@ -186,3 +186,26 @@ html,body,button,input,select{font-family:"Noto Sans Thai",Inter,Arial,sans-seri
  .shell:has(.photo-hero) .brand .pace-name{font-size:29px!important}
  .shell:has(.photo-hero) .brand .pace-credit{font-size:12px}
 }
+
+/* Quiet, tactile interaction system: no exaggerated bounce or neon press flashes */
+button{transition:background-color .16s ease,color .16s ease,border-color .16s ease,opacity .16s ease; -webkit-tap-highlight-color:transparent}
+button:active{transform:none!important;filter:none!important}
+.primary-cta,.action,.race-option,.quick-tool{transition:background-color .16s ease,color .16s ease,border-color .16s ease,opacity .16s ease!important}
+.primary-cta:active,.action:active{opacity:.88}
+.race-option:active,.quick-tool:active{opacity:.84}
+.brand .logo-bounce{animation:none!important;filter:none!important;will-change:auto!important}
+.pulse-icon{animation:none!important}
+.hero-copy{animation:none!important}
+.number-wheel-group{min-width:0}
+.wheel-grid{display:grid;gap:9px;margin-top:8px}
+.wheel-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.wheel-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.number-wheel{position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:center;min-width:0;height:164px;overflow:hidden;border:1px solid #33494e;border-radius:14px;background:linear-gradient(180deg,#111e23,#182a30 50%,#111e23);touch-action:pan-x;user-select:none;outline:none}
+.number-wheel:focus-visible{outline:2px solid #cbfa58;outline-offset:2px}
+.number-wheel:before,.number-wheel:after{content:"";position:absolute;left:9px;right:9px;height:1px;background:#56705d;opacity:.65;pointer-events:none}
+.number-wheel:before{top:54px}.number-wheel:after{bottom:54px}
+.wheel-selected{display:flex;align-items:center;justify-content:center;height:54px;flex:none;font:800 34px/1 Inter,Arial,sans-serif;color:#cbfa58;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.wheel-neighbor{display:flex;align-items:center;justify-content:center;height:54px;width:100%;padding:0;background:none;border:0;color:#7f9598;font:500 21px/1 Inter,Arial,sans-serif;font-variant-numeric:tabular-nums}
+.wheel-neighbor:disabled{opacity:.25}
+.number-wheel-group>.field{margin:8px 0}
+@media(prefers-reduced-motion:reduce){button{transition:none!important}}
