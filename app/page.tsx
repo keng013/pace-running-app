@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { Activity, Calculator, CalendarDays, BookOpen, UserRound, Flag, Home } from "lucide-react";
 import { distances, finishSeconds, formatPace, formatTime, predictTime, splits } from "@/lib/pace";
@@ -20,6 +20,61 @@ const navigation = [
 
 const clamp = (value: string, min: number, max: number) =>
   Math.max(min, Math.min(max, Number(value) || 0));
+
+type NumberWheelProps = {
+  label: string;
+  value: number;
+  max: number;
+  onChange: (value: number) => void;
+};
+
+function NumberWheel({ label, value, max, onChange }: NumberWheelProps) {
+  const touchStart = useRef<number | null>(null);
+  const wheelDelta = useRef(0);
+  const move = (steps: number) => onChange(Math.max(0, Math.min(max, value + steps)));
+  return (
+    <div className="number-wheel-group">
+      <span className="field">{label}</span>
+      <div
+        className="number-wheel"
+        role="spinbutton"
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+          if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
+          if (e.key === "PageUp") { e.preventDefault(); move(-5); }
+          if (e.key === "PageDown") { e.preventDefault(); move(5); }
+        }}
+        onWheel={(e) => {
+          wheelDelta.current += e.deltaY;
+          if (Math.abs(wheelDelta.current) >= 24) {
+            move(wheelDelta.current > 0 ? 1 : -1);
+            wheelDelta.current = 0;
+          }
+        }}
+        onTouchStart={(e) => { touchStart.current = e.touches[0].clientY; }}
+        onTouchEnd={(e) => {
+          if (touchStart.current === null) return;
+          const distance = touchStart.current - e.changedTouches[0].clientY;
+          if (Math.abs(distance) > 12) move(Math.round(distance / 36) || (distance > 0 ? 1 : -1));
+          touchStart.current = null;
+        }}
+      >
+        <button type="button" className="wheel-neighbor" disabled={value === 0} onClick={() => move(-1)} aria-label={`ลด${label}`}>
+          {value > 0 ? String(value - 1).padStart(2, "0") : " "}
+        </button>
+        <div className="wheel-selected">{String(value).padStart(2, "0")}</div>
+        <button type="button" className="wheel-neighbor" disabled={value === max} onClick={() => move(1)} aria-label={`เพิ่ม${label}`}>
+          {value < max ? String(value + 1).padStart(2, "0") : " "}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function Page() {
   const [tab, setTab] = useState<Tab>("home");
@@ -118,33 +173,18 @@ export default function Page() {
               {mode === "pace" ? (
                 <>
                   <label className="field">Pace เฉลี่ย (นาที : วินาที / กม.)</label>
-                  <div className="grid">
-                    <div>
-                      <label className="field" htmlFor="pace-min">นาที</label>
-                      <input id="pace-min" className="control" type="number" min={0} max={59} value={minutes} onChange={(e) => setMinutes(clamp(e.target.value, 0, 59))} />
-                    </div>
-                    <div>
-                      <label className="field" htmlFor="pace-sec">วินาที</label>
-                      <input id="pace-sec" className="control" type="number" min={0} max={59} value={seconds} onChange={(e) => setSeconds(clamp(e.target.value, 0, 59))} />
-                    </div>
+                  <div className="wheel-grid two">
+                    <NumberWheel label="นาที" value={minutes} max={59} onChange={setMinutes} />
+                    <NumberWheel label="วินาที" value={seconds} max={59} onChange={setSeconds} />
                   </div>
                 </>
               ) : (
                 <>
                   <label className="field">เวลาที่ต้องการวิ่งจบ</label>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 8 }}>
-                    <div>
-                      <label className="field" htmlFor="finish-hours">ชั่วโมง</label>
-                      <input id="finish-hours" className="control" type="number" min={0} max={99} value={hours} onChange={(e) => setHours(clamp(e.target.value, 0, 99))} />
-                    </div>
-                    <div>
-                      <label className="field" htmlFor="finish-minutes">นาที</label>
-                      <input id="finish-minutes" className="control" type="number" min={0} max={59} value={finishMinutes} onChange={(e) => setFinishMinutes(clamp(e.target.value, 0, 59))} />
-                    </div>
-                    <div>
-                      <label className="field" htmlFor="finish-seconds">วินาที</label>
-                      <input id="finish-seconds" className="control" type="number" min={0} max={59} value={finishSecs} onChange={(e) => setFinishSecs(clamp(e.target.value, 0, 59))} />
-                    </div>
+                  <div className="wheel-grid three">
+                    <NumberWheel label="ชั่วโมง" value={hours} max={99} onChange={setHours} />
+                    <NumberWheel label="นาที" value={finishMinutes} max={59} onChange={setFinishMinutes} />
+                    <NumberWheel label="วินาที" value={finishSecs} max={59} onChange={setFinishSecs} />
                   </div>
                 </>
               )}
