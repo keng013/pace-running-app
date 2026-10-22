@@ -74,3 +74,9 @@
 .quick-tool svg{width:25px;height:25px}
 .nav{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:rgba(5,19,23,.96)}
 @media(min-width:600px){.photo-hero{height:390px}.hero-copy h1{font-size:44px}}
+
+/* Locally hosted original hero asset: place generated hero-runner.webp in /public */
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
+body,button,input,select{font-family:Inter,Kanit,Arial,sans-serif}
+.hero-copy h1,.section-heading h3,.primary-cta,.race-option strong{font-family:Kanit,Inter,sans-serif}
+.photo-hero{background-image:linear-gradient(180deg,rgba(3,13,17,.03) 0%,rgba(3,13,17,.1) 45%,rgba(2,10,13,.82) 100%),url("/hero-runner.webp"),url("/runner-sunset.svg");background-position:center,60% center,center}
