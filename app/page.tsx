@@ -50,10 +50,12 @@ export default function Page() {
     <>
       <main className="shell">
         <header className="brand">
-          <span className="logo" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <Image src="/pace-mark.svg" alt="PACE runner logo" width={36} height={36} className="logo-bounce" />
-            P<span className="lime">A</span>CE
-            <span className="small muted"> / KRIT.DEV</span>
+          <span className="logo pace-lockup">
+            <Image src="/pace-mark.svg" alt="PACE runner logo" width={60} height={60} className="logo-bounce pace-symbol" />
+            <span className="pace-wordmark">
+              <span className="pace-name">P<span className="lime">A</span>CE</span>
+              <span className="pace-credit">/ KRIT.DEV</span>
+            </span>
           </span>
           <Activity color="#cbfa58" className="pulse-icon" />
         </header>
