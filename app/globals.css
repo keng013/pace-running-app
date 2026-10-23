@@ -366,3 +366,12 @@ button:active{transform:none!important;filter:none!important}
 .training-zone div small{font-size:11px;color:#9bb5b4}
 .training-zone>b{font-size:17px;white-space:nowrap;color:#c9fa4e;font-variant-numeric:tabular-nums}
 .training-zone>b small{font-size:10px;font-weight:500;color:#adc2bd}
+
+.strava-connect-card{padding:19px 16px;margin:16px 0 22px;background:linear-gradient(145deg,#24302b,#122329);border:1px solid #435b4e;border-radius:18px}
+.strava-connect-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.strava-brand-mark{width:43px;height:43px;border-radius:12px;display:grid;place-items:center;background:#fc4c02;color:white;font-weight:900;font-size:25px;font-style:italic}
+.strava-connect-top h3{margin:4px 0 0;font-size:19px}
+.strava-connect-card>p{font-size:13px;line-height:1.7;color:#b9ceca}
+.strava-connect-button{display:flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;background:#fc4c02;color:white;font-weight:800;padding:14px;border-radius:12px;margin:16px 0 10px}
+.strava-connect-button:hover{background:#e74502}
+.strava-connect-card .strava-connect-note{font-size:11px;color:#8fa9a7;margin-bottom:0}
