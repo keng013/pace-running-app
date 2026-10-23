@@ -414,6 +414,12 @@ export default function Page() {
           <>
             <div className="eyebrow">RUNNER PROFILE</div>
             <h2>My Progress</h2>
+            <section className="strava-connect-card">
+              <div className="strava-connect-top"><span className="strava-brand-mark">S</span><div><span className="academy-overline">ACTIVITY SYNC</span><h3>Connect with Strava</h3></div></div>
+              <p>เชื่อมบัญชี Strava เพื่อเตรียมนำข้อมูลระยะทาง เพซ และประวัติการวิ่งมาแสดงใน PACE</p>
+              <a className="strava-connect-button" href="/api/strava/authorize">Connect with Strava <span aria-hidden="true">↗</span></a>
+              <p className="strava-connect-note">คุณจะถูกส่งไปยัง Strava เพื่ออนุญาตการเข้าถึงข้อมูล · ต้องตั้งค่า Strava API Client ID และ Secret ก่อนใช้งานจริง</p>
+            </section>
             <div className="panel"><h3>Welcome, Runner!</h3><p className="muted">บัญชีผู้ใช้และบันทึกกิจกรรมจะเพิ่มใน Phase 2</p></div>
             <div className="panel">
               <h3>Race Time Predictor</h3>
