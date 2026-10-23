@@ -97,10 +97,7 @@ export async function getAnalytics(days: number): Promise<AnalyticsSnapshot> {
 
 async function getFeatureEvents(range: {since:string;until:string}): Promise<{name:string;events:number}[]> {
   try {
-    const result = await query("aggregate", { ...range, by: "eventName", limit: "100" }, "events");
-    return rowsOf(result).filter(row => {
-      const name = labelOf(row, "eventName");
-      return name === "pace_feature";
-    }).map(row => ({ name: labelOf(row, "feature"), events: metric(row, ["events", "count", "total"]) ?? 0 })).filter(row => row.name !== "Unknown" && row.events > 0);
+    const result = await query("aggregate", { ...range, by: "eventData/feature", filter: "eventName eq 'pace_feature'", limit: "100" }, "events");
+    return rowsOf(result).map(row => ({ name: String(row["eventData/feature"] ?? obj(row.eventData).feature ?? obj(row.dimensions)["eventData/feature"] ?? row.feature ?? "Unknown"), events: metric(row, ["events", "count", "total"]) ?? 0 })).filter(row => row.name !== "Unknown" && row.events > 0);
   } catch { return []; }
 }
