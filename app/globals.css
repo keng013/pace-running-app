@@ -383,3 +383,25 @@ button:active{transform:none!important;filter:none!important}
 .strava-modal h3{font-size:22px;margin:0 0 12px;color:#f4f9f7}
 .strava-modal p{font-size:14px;line-height:1.85;color:#b7cac7;margin:0 0 23px}
 .strava-modal-close{width:100%;padding:14px;border:0;border-radius:12px;background:#c9fa4e;color:#122324;font-weight:800;font-family:inherit;cursor:pointer}
+
+/* PACE Admin */
+.admin-page{min-height:100vh;background:#101b20;color:#eef5f0;padding:48px 20px;font-family:inherit}
+.admin-container{max-width:1000px;margin:auto}
+.admin-panel{background:#17282c;border:1px solid #30484a;border-radius:20px;padding:28px;margin:24px 0}
+.admin-login{max-width:430px;margin:8vh auto}
+.admin-kicker{color:#c9fa4e;font-size:12px;font-weight:800;letter-spacing:.13em}
+.admin-page h1{font-size:clamp(28px,5vw,42px);margin:10px 0}
+.admin-page h2{font-size:22px;margin:10px 0}
+.admin-page p{color:#bacbcb;line-height:1.7}
+.admin-login form{display:grid;gap:12px;margin:24px 0}
+.admin-login label{font-size:14px;font-weight:700}
+.admin-login input{padding:14px 16px;border:1px solid #52676b;background:#0e1c20;color:white;border-radius:12px;font-size:16px}
+.admin-login button,.admin-action{display:inline-block;background:#c9fa4e;color:#102020;font-weight:800;border:0;border-radius:12px;padding:14px 20px;text-decoration:none;cursor:pointer}
+.admin-login a,.admin-back{color:#c9fa4e}
+.admin-error{color:#ff9898!important}
+.admin-header{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.admin-logout{background:transparent;color:#e5f0ec;border:1px solid #587071;border-radius:10px;padding:11px 17px;cursor:pointer}
+.admin-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.admin-metric{background:#17282c;border:1px solid #30484a;border-radius:16px;padding:20px;display:grid;gap:8px}
+.admin-metric strong{font-size:32px;color:#c9fa4e}
+.admin-metric small,.admin-note{color:#9cb3b3}
