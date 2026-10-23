@@ -28,7 +28,7 @@ const countViews = (row: Json) => metric(row, ["pageviews", "pageViews", "views"
 const countVisitors = (row: Json) => metric(row, ["visitors", "uniqueVisitors", "unique", "users"]);
 const labelOf = (row: Json, key: string) => {
   const dimension = obj(row.dimensions);
-  const value = row[key] ?? dimension[key] ?? row.name ?? row.label;
+  const value = row[key] ?? dimension[key] ?? obj(row.dimension)[key] ?? row.name ?? row.label;
   return typeof value === "string" && value.trim() ? value : "Unknown";
 };
 
@@ -73,9 +73,16 @@ export async function getAnalytics(days: number): Promise<AnalyticsSnapshot> {
   const count = obj(ok(0));
   const views = countViews(count) ?? countViews(obj(count.data)) ?? countViews(obj(count.result));
   const visitors = countVisitors(count) ?? countVisitors(obj(count.data)) ?? countVisitors(obj(count.result));
-  const trend = rowsOf(ok(1)).map(row => ({
-    date: labelOf(row, "day"), views: countViews(row) ?? 0, visitors: countVisitors(row) ?? 0,
-  })).filter(row => row.date !== "Unknown").sort((a,b) => a.date.localeCompare(b.date));
+  const trend = rowsOf(ok(1)).map(row => {
+    const raw = row.day ?? obj(row.dimensions).day ?? row.date ?? row.timestamp ?? row.time ?? row.bucket ?? row.name;
+    let date = "Unknown";
+    if (typeof raw === "number") date = new Date(raw < 1e11 ? raw * 1000 : raw).toISOString().slice(0, 10);
+    else if (typeof raw === "string" && raw.trim()) {
+      const parsed = /^\\d{10,13}$/.test(raw) ? new Date(Number(raw) < 1e11 ? Number(raw) * 1000 : Number(raw)) : new Date(raw);
+      date = Number.isFinite(parsed.getTime()) ? parsed.toISOString().slice(0, 10) : raw;
+    }
+    return { date, views: countViews(row) ?? 0, visitors: countVisitors(row) ?? 0 };
+  }).filter(row => row.date !== "Unknown").sort((a,b) => a.date.localeCompare(b.date));
   const pages = dimensionRows(ok(2), "requestPath");
   const sources = dimensionRows(ok(3), "referrerHostname");
   const countries = dimensionRows(ok(4), "country");
