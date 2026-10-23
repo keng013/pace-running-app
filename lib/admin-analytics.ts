@@ -8,7 +8,7 @@ export type TrendRow = { date: string; views: number; visitors: number };
 export type AnalyticsSnapshot = {
   available: boolean; reason: string; views: number | null; visitors: number | null;
   trend: TrendRow[]; pages: MetricRow[]; sources: MetricRow[]; countries: MetricRow[];
-  devices: MetricRow[]; browsers: MetricRow[]; fetchedAt: string | null;
+  devices: MetricRow[]; browsers: MetricRow[]; features: {name: string; events: number}[]; fetchedAt: string | null;
 };
 
 type Json = Record<string, unknown>;
@@ -32,10 +32,10 @@ const labelOf = (row: Json, key: string) => {
   return typeof value === "string" && value.trim() ? value : "Unknown";
 };
 
-async function query(path: string, params: Record<string, string>): Promise<unknown> {
+async function query(path: string, params: Record<string, string>, category: "visits" | "events" = "visits"): Promise<unknown> {
   const token = process.env.VERCEL_ANALYTICS_API_TOKEN;
   if (!token) throw new Error("MISSING_TOKEN");
-  const url = new URL("https://api.vercel.com/v1/query/web-analytics/visits/" + path);
+  const url = new URL("https://api.vercel.com/v1/query/web-analytics/" + category + "/" + path);
   url.searchParams.set("projectId", PROJECT_ID);
   url.searchParams.set("teamId", TEAM_ID);
   for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
@@ -54,7 +54,7 @@ function dimensionRows(value: unknown, key: string): MetricRow[] {
   })).filter(row => row.views > 0 || row.visitors > 0).sort((a, b) => b.views - a.views).slice(0, 10);
 }
 export async function getAnalytics(days: number): Promise<AnalyticsSnapshot> {
-  const empty: AnalyticsSnapshot = { available: false, reason: "", views: null, visitors: null, trend: [], pages: [], sources: [], countries: [], devices: [], browsers: [], fetchedAt: null };
+  const empty: AnalyticsSnapshot = { available: false, reason: "", views: null, visitors: null, trend: [], pages: [], sources: [], countries: [], devices: [], browsers: [], features: [], fetchedAt: null };
   if (!process.env.VERCEL_ANALYTICS_API_TOKEN) return { ...empty, reason: "ยังไม่ได้ตั้งค่า VERCEL_ANALYTICS_API_TOKEN สำหรับดึงข้อมูลจริง" };
   const since = new Date(Date.now() - days * 86400000).toISOString();
   const until = new Date().toISOString();
@@ -88,8 +88,19 @@ export async function getAnalytics(days: number): Promise<AnalyticsSnapshot> {
   const countries = dimensionRows(ok(4), "country");
   const devices = dimensionRows(ok(5), "deviceType");
   const browsers = dimensionRows(ok(6), "browserName");
+  const features = await getFeatureEvents(range);
   const available = views !== null || visitors !== null || trend.length > 0 || pages.length > 0;
   const firstError = results.find(result => result.status === "rejected") as PromiseRejectedResult | undefined;
   const reason = available ? (firstError ? "บางหมวดข้อมูลยังไม่พร้อมใช้งาน" : "") : firstError ? String(firstError.reason?.message || "ANALYTICS_UNAVAILABLE").replace(/Bearer\s+\S+/gi, "[redacted]") : "API ยังไม่ส่งข้อมูลในช่วงเวลาที่เลือก";
-  return { available, reason, views, visitors, trend, pages, sources, countries, devices, browsers, fetchedAt: available ? new Date().toISOString() : null };
+  return { available, reason, views, visitors, trend, pages, sources, countries, devices, browsers, features, fetchedAt: available ? new Date().toISOString() : null };
+}
+
+async function getFeatureEvents(range: {since:string;until:string}): Promise<{name:string;events:number}[]> {
+  try {
+    const result = await query("aggregate", { ...range, by: "eventName", limit: "100" }, "events");
+    return rowsOf(result).filter(row => {
+      const name = labelOf(row, "eventName");
+      return name === "pace_feature";
+    }).map(row => ({ name: labelOf(row, "feature"), events: metric(row, ["events", "count", "total"]) ?? 0 })).filter(row => row.name !== "Unknown" && row.events > 0);
+  } catch { return []; }
 }
