@@ -101,5 +101,5 @@ async function getFeatureEvents(range: {since:string;until:string}): Promise<{it
     const result = await query("aggregate", { ...range, by: "eventData/feature", filter: "eventName eq 'pace_feature'", limit: "100" }, "events");
     const items = rowsOf(result).map(row => ({ name: String(row["eventData/feature"] ?? obj(row.eventData).feature ?? obj(row.dimensions)["eventData/feature"] ?? row.feature ?? "Unknown"), events: metric(row, ["events", "count", "total", "pageviews"]) ?? 0 })).filter(row => row.name !== "Unknown" && row.events > 0);
     return { items, status: items.length ? "เชื่อมต่อสำเร็จ" : "API ตอบกลับแล้ว แต่ยังไม่มีข้อมูล Custom Events แยกตามฟีเจอร์" };
-  } catch (error) { return { items: [], status: "Custom Events API: " + (error instanceof Error ? error.message : "Unavailable") }; }
+  } catch (error) { return { items: [], status: (error instanceof Error && error.message === "ANALYTICS_HTTP_402") ? "Custom Events API ตอบ HTTP 402 (Payment Required) — ตรวจสอบสิทธิ์และการเรียกเก็บเงินของ Vercel; ไม่ใช่ปัญหาที่ Refresh แก้ได้" : "Custom Events API: " + (error instanceof Error ? error.message : "Unavailable") }; }
 }
