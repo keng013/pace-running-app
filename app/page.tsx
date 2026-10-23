@@ -159,6 +159,7 @@ const vdot=(km:number,sec:number)=>sec>0?vo2(km*60000/sec)/fraction(sec/60):0;
 const trainingPace=(score:number,ratio:number)=>{let lo=0,hi=600;for(let i=0;i<50;i++){const mid=(lo+hi)/2;if(vo2(mid)<score*ratio)lo=mid;else hi=mid;}return formatPace(60000/((lo+hi)/2));};
 export default function Page() {
   const [tab, setTab] = useState<Tab>("home");
+  const [stravaNotice, setStravaNotice] = useState(false);
   const [distance, setDistance] = useState(21.0975);
   const [mode, setMode] = useState<Mode>("pace");
   const [minutes, setMinutes] = useState(6);
@@ -417,9 +418,17 @@ export default function Page() {
             <section className="strava-connect-card">
               <div className="strava-connect-top"><span className="strava-brand-mark" aria-label="Strava logo"><svg viewBox="0 0 24 24" width="27" height="27" role="img" aria-hidden="true" fill="currentColor"><path d="M15.387 17.944h-2.668l-1.613-3.155h-2.43l4.043 7.211 4.04-7.211h-2.43l-1.61 3.155zM10.164 0 3.24 12.205h4.083l2.84-5.127 2.84 5.127h4.082L10.164 0z"/></svg></span><div><span className="academy-overline">ACTIVITY SYNC</span><h3>Connect with Strava</h3></div></div>
               <p>เชื่อมบัญชี Strava เพื่อเตรียมนำข้อมูลระยะทาง เพซ และประวัติการวิ่งมาแสดงใน PACE</p>
-              <a className="strava-connect-button" href="/api/strava/authorize">Connect with Strava <span aria-hidden="true">↗</span></a>
-              <p className="strava-connect-note">คุณจะถูกส่งไปยัง Strava เพื่ออนุญาตการเข้าถึงข้อมูล · ต้องตั้งค่า Strava API Client ID และ Secret ก่อนใช้งานจริง</p>
+              <button type="button" className="strava-connect-button" onClick={async () => { try { const response = await fetch("/api/strava/status", { cache: "no-store" }); if (!response.ok) { setStravaNotice(true); return; } const data: { ready?: boolean } = await response.json(); if (data.ready) window.location.assign("/api/strava/authorize"); else setStravaNotice(true); } catch { setStravaNotice(true); } }}>Connect with Strava <span aria-hidden="true">↗</span></button>
+              <p className="strava-connect-note">เชื่อมต่อกิจกรรมจาก Strava · ฟีเจอร์กำลังพัฒนา</p>
             </section>
+            {stravaNotice && <div className="strava-modal-backdrop" onClick={() => setStravaNotice(false)}>
+              <div className="strava-modal" role="alertdialog" aria-modal="true" aria-labelledby="strava-modal-title" aria-describedby="strava-modal-description" onClick={e => e.stopPropagation()}>
+                <div className="strava-modal-icon"><Activity size={26}/></div>
+                <h3 id="strava-modal-title">อยู่ระหว่างการพัฒนา</h3>
+                <p id="strava-modal-description">การเชื่อมต่อ Strava ยังไม่พร้อมใช้งานในขณะนี้ เรากำลังพัฒนาฟีเจอร์นี้เพื่อให้คุณนำข้อมูลการวิ่งมาใช้ใน PACE ได้เร็ว ๆ นี้</p>
+                <button type="button" className="strava-modal-close" onClick={() => setStravaNotice(false)}>เข้าใจแล้ว</button>
+              </div>
+            </div>}
             <div className="panel"><h3>Welcome, Runner!</h3><p className="muted">บัญชีผู้ใช้และบันทึกกิจกรรมจะเพิ่มใน Phase 2</p></div>
             <div className="panel">
               <h3>Race Time Predictor</h3>
