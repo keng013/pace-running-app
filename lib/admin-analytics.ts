@@ -8,7 +8,7 @@ export type TrendRow = { date: string; views: number; visitors: number };
 export type AnalyticsSnapshot = {
   available: boolean; reason: string; views: number | null; visitors: number | null;
   trend: TrendRow[]; pages: MetricRow[]; sources: MetricRow[]; countries: MetricRow[];
-  devices: MetricRow[]; browsers: MetricRow[]; features: {name: string; events: number}[]; fetchedAt: string | null;
+  devices: MetricRow[]; browsers: MetricRow[]; features: {name: string; events: number}[]; featureStatus: string; fetchedAt: string | null;
 };
 
 type Json = Record<string, unknown>;
@@ -54,7 +54,7 @@ function dimensionRows(value: unknown, key: string): MetricRow[] {
   })).filter(row => row.views > 0 || row.visitors > 0).sort((a, b) => b.views - a.views).slice(0, 10);
 }
 export async function getAnalytics(days: number): Promise<AnalyticsSnapshot> {
-  const empty: AnalyticsSnapshot = { available: false, reason: "", views: null, visitors: null, trend: [], pages: [], sources: [], countries: [], devices: [], browsers: [], features: [], fetchedAt: null };
+  const empty: AnalyticsSnapshot = { available: false, reason: "", views: null, visitors: null, trend: [], pages: [], sources: [], countries: [], devices: [], browsers: [], features: [], featureStatus: "ยังไม่ได้ตรวจสอบ", fetchedAt: null };
   if (!process.env.VERCEL_ANALYTICS_API_TOKEN) return { ...empty, reason: "ยังไม่ได้ตั้งค่า VERCEL_ANALYTICS_API_TOKEN สำหรับดึงข้อมูลจริง" };
   const since = new Date(Date.now() - days * 86400000).toISOString();
   const until = new Date().toISOString();
@@ -88,16 +88,18 @@ export async function getAnalytics(days: number): Promise<AnalyticsSnapshot> {
   const countries = dimensionRows(ok(4), "country");
   const devices = dimensionRows(ok(5), "deviceType");
   const browsers = dimensionRows(ok(6), "browserName");
-  const features = await getFeatureEvents(range);
+  const featureResult = await getFeatureEvents(range);
+  const features = featureResult.items;
   const available = views !== null || visitors !== null || trend.length > 0 || pages.length > 0;
   const firstError = results.find(result => result.status === "rejected") as PromiseRejectedResult | undefined;
   const reason = available ? (firstError ? "บางหมวดข้อมูลยังไม่พร้อมใช้งาน" : "") : firstError ? String(firstError.reason?.message || "ANALYTICS_UNAVAILABLE").replace(/Bearer\s+\S+/gi, "[redacted]") : "API ยังไม่ส่งข้อมูลในช่วงเวลาที่เลือก";
-  return { available, reason, views, visitors, trend, pages, sources, countries, devices, browsers, features, fetchedAt: available ? new Date().toISOString() : null };
+  return { available, reason, views, visitors, trend, pages, sources, countries, devices, browsers, features, featureStatus: featureResult.status, fetchedAt: available ? new Date().toISOString() : null };
 }
 
-async function getFeatureEvents(range: {since:string;until:string}): Promise<{name:string;events:number}[]> {
+async function getFeatureEvents(range: {since:string;until:string}): Promise<{items:{name:string;events:number}[];status:string}> {
   try {
     const result = await query("aggregate", { ...range, by: "eventData/feature", filter: "eventName eq 'pace_feature'", limit: "100" }, "events");
-    return rowsOf(result).map(row => ({ name: String(row["eventData/feature"] ?? obj(row.eventData).feature ?? obj(row.dimensions)["eventData/feature"] ?? row.feature ?? "Unknown"), events: metric(row, ["events", "count", "total"]) ?? 0 })).filter(row => row.name !== "Unknown" && row.events > 0);
-  } catch { return []; }
+    const items = rowsOf(result).map(row => ({ name: String(row["eventData/feature"] ?? obj(row.eventData).feature ?? obj(row.dimensions)["eventData/feature"] ?? row.feature ?? "Unknown"), events: metric(row, ["events", "count", "total", "pageviews"]) ?? 0 })).filter(row => row.name !== "Unknown" && row.events > 0);
+    return { items, status: items.length ? "เชื่อมต่อสำเร็จ" : "API ตอบกลับแล้ว แต่ยังไม่มีข้อมูล Custom Events แยกตามฟีเจอร์" };
+  } catch (error) { return { items: [], status: "Custom Events API: " + (error instanceof Error ? error.message : "Unavailable") }; }
 }
