@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { trackFeature } from "@/lib/feature-analytics";
 import { Activity, Calculator, CalendarDays, BookOpen, UserRound, Flag, Home } from "lucide-react";
 import { distances, finishSeconds, formatPace, formatTime, predictTime, splits } from "@/lib/pace";
 
@@ -193,6 +194,8 @@ export default function Page() {
 
   const changeTab = (next: Tab) => {
     setTab(next);
+    const features: Partial<Record<Tab, "Pace Calculator" | "Race Splits" | "Training Planner" | "Running Academy">> = { calculator: "Pace Calculator", splits: "Race Splits", training: "Training Planner", academy: "Running Academy" };
+    if (features[next]) trackFeature(features[next], "open");
     if (typeof window !== "undefined") window.scrollTo(0, 0);
   };
 
@@ -326,8 +329,8 @@ export default function Page() {
             <div className="eyebrow">TRAIN SMARTER</div>
             <h2>Training Planner</h2>
             <div className="training-switch">
-              <button className={trainingTool==="vdot"?"selected":""} onClick={()=>setTrainingTool("vdot")}>VDOT Test</button>
-              <button className={trainingTool==="heart"?"selected":""} onClick={()=>setTrainingTool("heart")}>Heart Rate Zones</button>
+              <button className={trainingTool==="vdot"?"selected":""} onClick={()=>{setTrainingTool("vdot");trackFeature("VDOT Calculator","open");}}>VDOT Test</button>
+              <button className={trainingTool==="heart"?"selected":""} onClick={()=>{setTrainingTool("heart");trackFeature("Heart Rate Zones","open");}}>Heart Rate Zones</button>
             </div>
             {trainingTool==="vdot"?<section className="training-tool-card">
               <span className="academy-overline">RUNNING PERFORMANCE</span><h3>VDOT Running Calculator</h3>
@@ -418,7 +421,7 @@ export default function Page() {
             <section className="strava-connect-card">
               <div className="strava-connect-top"><span className="strava-brand-mark" aria-label="Strava logo"><svg viewBox="0 0 24 24" width="27" height="27" role="img" aria-hidden="true" fill="currentColor"><path d="M15.387 17.944h-2.668l-1.613-3.155h-2.43l4.043 7.211 4.04-7.211h-2.43l-1.61 3.155zM10.164 0 3.24 12.205h4.083l2.84-5.127 2.84 5.127h4.082L10.164 0z"/></svg></span><div><span className="academy-overline">ACTIVITY SYNC</span><h3>Connect with Strava</h3></div></div>
               <p>เชื่อมบัญชี Strava เพื่อเตรียมนำข้อมูลระยะทาง เพซ และประวัติการวิ่งมาแสดงใน PACE</p>
-              <button type="button" className="strava-connect-button" onClick={async () => { try { const response = await fetch("/api/strava/status", { cache: "no-store" }); if (!response.ok) { setStravaNotice(true); return; } const data: { ready?: boolean } = await response.json(); if (data.ready) window.location.assign("/api/strava/authorize"); else setStravaNotice(true); } catch { setStravaNotice(true); } }}>Connect with Strava <span aria-hidden="true">↗</span></button>
+              <button type="button" className="strava-connect-button" onClick={async () => { trackFeature("Strava Connect","attempt"); try { const response = await fetch("/api/strava/status", { cache: "no-store" }); if (!response.ok) { setStravaNotice(true); return; } const data: { ready?: boolean } = await response.json(); if (data.ready) window.location.assign("/api/strava/authorize"); else setStravaNotice(true); } catch { setStravaNotice(true); } }}>Connect with Strava <span aria-hidden="true">↗</span></button>
               <p className="strava-connect-note">เชื่อมต่อกิจกรรมจาก Strava · ฟีเจอร์กำลังพัฒนา</p>
             </section>
             {stravaNotice && <div className="strava-modal-backdrop" onClick={() => setStravaNotice(false)}>
