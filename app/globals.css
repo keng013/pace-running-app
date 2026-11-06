@@ -472,3 +472,24 @@ button:active{transform:none!important;filter:none!important}
 .admin-v2-footer{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;font-size:10px;color:#718f91;margin:30px 0 8px}
 @media(max-width:1050px){.admin-v2-sidebar{width:200px}.admin-v2-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.admin-v2-shell{display:block}.admin-v2-sidebar{position:relative;width:100%;height:auto;padding:12px 18px;display:flex;flex-direction:row;align-items:center;flex-wrap:wrap}.admin-v2-logo{margin:0 auto 0 0;font-size:19px}.admin-v2-nav-label,.admin-v2-sidebar>a:not(.admin-v2-logo),.admin-v2-nav-active,.admin-v2-security{display:none}.admin-v2-sidebar-bottom{margin:0}.admin-v2-sidebar-bottom button{padding:8px 12px;font-size:11px}.admin-v2-content{padding:25px 15px}.admin-v2-top-actions{width:100%;justify-content:space-between}.admin-v2-kpis{gap:9px}.admin-v2-kpi{padding:15px}.admin-v2-kpi>strong{font-size:27px}.admin-v2-grid{grid-template-columns:1fr}.admin-v2-panel{padding:17px}.admin-v2-status a{margin-left:0}}
+
+/* PACE Zone navigation and Nutrition workspace */
+.nav{justify-content:space-between;gap:2px;padding:11px 10px max(15px,env(safe-area-inset-bottom));}
+.nav button{flex:1;min-width:0;min-height:48px;font-size:10px;gap:5px;padding:4px 0;border-radius:12px;}
+.nav button.active{background:rgba(203,250,88,.08);}
+.nutrition-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:5px;background:#17262b;border:1px solid #30434a;border-radius:16px;position:sticky;top:7px;z-index:4;}
+.nutrition-tabs button{min-width:0;min-height:43px;color:#b9c9cc;background:transparent;border:0;border-radius:11px;font-weight:700;font-size:13px;}
+.nutrition-tabs button.selected{background:#cbfa58;color:#102019;box-shadow:0 3px 12px rgba(0,0,0,.13);}
+.nutrition-weight-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.nutrition-weight-summary>div{display:flex;flex-direction:column;gap:7px;padding:15px 12px;background:#142328;border:1px solid #34474c;border-radius:14px;min-width:0;}
+.nutrition-weight-summary small{font-size:11px;color:#aec0c4;}
+.nutrition-weight-summary strong{font-size:28px;line-height:1.1;color:#cbfa58;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.nutrition-weight-summary strong span{font-size:13px;color:#d6e3e1;}
+.nutrition-weight-chart{padding:17px 6px 8px;background:#122329;border:1px solid #2d4349;border-radius:15px;overflow-x:auto;}
+.nutrition-weight-bars{display:flex;align-items:end;gap:7px;min-height:154px;min-width:max-content;padding:0 8px;}
+.nutrition-weight-bar{display:flex;flex-direction:column;align-items:center;gap:5px;width:47px;flex-shrink:0;}
+.nutrition-weight-bar strong{color:#ebf9da;font-size:12px;font-variant-numeric:tabular-nums;}
+.nutrition-weight-bar small{font-size:10px;color:#aabdc2;white-space:nowrap;}
+.nutrition-weight-track{width:20px;height:105px;border-radius:9px;background:#314347;display:flex;align-items:end;overflow:hidden;}
+.nutrition-weight-track>div{width:100%;background:linear-gradient(180deg,#cbfa58,#65b789);border-radius:9px 9px 0 0;}
+@media(max-width:370px){.nutrition-weight-summary strong{font-size:23px}.nutrition-tabs button{font-size:12px}}
