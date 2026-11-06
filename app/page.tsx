@@ -14,9 +14,7 @@ type Strategy = "even" | "negative" | "positive";
 const navigation = [
   { id: "home" as Tab, icon: Home, label: "Home" },
   { id: "calculator" as Tab, icon: Calculator, label: "Pace" },
-  { id: "splits" as Tab, icon: Flag, label: "Splits" },
-  { id: "training" as Tab, icon: CalendarDays, label: "Training" },
-  { id: "academy" as Tab, icon: BookOpen, label: "Learn" },
+  { id: "training" as Tab, icon: CalendarDays, label: "Train" },
   { id: "nutrition" as Tab, icon: UtensilsCrossed, label: "Nutrition" },
   { id: "profile" as Tab, icon: UserRound, label: "Me" },
 ];
@@ -459,7 +457,7 @@ export default function Page() {
       </main>
       <nav className="nav" aria-label="Main navigation">
         {navigation.map(({ id, icon: Icon, label }) => (
-          <button key={id} className={tab === id ? "active" : ""} onClick={() => changeTab(id)} aria-current={tab === id ? "page" : undefined}>
+          <button key={id} className={(tab === id || (id === "calculator" && tab === "splits") || (id === "training" && tab === "academy")) ? "active" : ""} onClick={() => changeTab(id)} aria-current={(tab === id || (id === "calculator" && tab === "splits") || (id === "training" && tab === "academy")) ? "page" : undefined}>
             <Icon size={19} />{label}
           </button>
         ))}
