@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import NutritionTracker from "./nutrition-tracker";
+import AuthProfile from "./auth-profile";
 import { trackFeature } from "@/lib/feature-analytics";
 import { Activity, Calculator, CalendarDays, BookOpen, UserRound, Flag, Home, UtensilsCrossed } from "lucide-react";
 import { distances, finishSeconds, formatPace, formatTime, predictTime, splits } from "@/lib/pace";
@@ -160,6 +161,7 @@ const vdot=(km:number,sec:number)=>sec>0?vo2(km*60000/sec)/fraction(sec/60):0;
 const trainingPace=(score:number,ratio:number)=>{let lo=0,hi=600;for(let i=0;i<50;i++){const mid=(lo+hi)/2;if(vo2(mid)<score*ratio)lo=mid;else hi=mid;}return formatPace(60000/((lo+hi)/2));};
 export default function Page() {
   const [tab, setTab] = useState<Tab>("home");
+  useEffect(() => { if (new URLSearchParams(window.location.search).get("tab") === "profile") setTab("profile"); }, []);
   const [stravaNotice, setStravaNotice] = useState(false);
   const [distance, setDistance] = useState(21.0975);
   const [mode, setMode] = useState<Mode>("pace");
@@ -435,7 +437,7 @@ export default function Page() {
                 <button type="button" className="strava-modal-close" onClick={() => setStravaNotice(false)}>เข้าใจแล้ว</button>
               </div>
             </div>}
-            <div className="panel"><h3>Welcome, Runner!</h3><p className="muted">บัญชีผู้ใช้และบันทึกกิจกรรมจะเพิ่มใน Phase 2</p></div>
+            <AuthProfile />
             <div className="panel">
               <h3>Race Time Predictor</h3>
               <label className="field" htmlFor="known-distance">ผลการแข่งขันล่าสุด</label>
