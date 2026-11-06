@@ -1,3 +1,3 @@
 import { globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
+import nextVitals from "eslint-config-next/core-web-vitals.js";
 export default [...nextVitals, globalIgnores([".next/**","out/**","build/**","next-env.d.ts"])];
