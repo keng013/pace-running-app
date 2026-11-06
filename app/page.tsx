@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import NutritionTracker from "./nutrition-tracker";
 import { trackFeature } from "@/lib/feature-analytics";
-import { Activity, Calculator, CalendarDays, BookOpen, UserRound, Flag, Home } from "lucide-react";
+import { Activity, Calculator, CalendarDays, BookOpen, UserRound, Flag, Home, UtensilsCrossed } from "lucide-react";
 import { distances, finishSeconds, formatPace, formatTime, predictTime, splits } from "@/lib/pace";
 
-type Tab = "home" | "calculator" | "splits" | "training" | "academy" | "profile";
+type Tab = "home" | "calculator" | "splits" | "training" | "academy" | "nutrition" | "profile";
 type Mode = "pace" | "finish";
 type Strategy = "even" | "negative" | "positive";
 
@@ -16,6 +17,7 @@ const navigation = [
   { id: "splits" as Tab, icon: Flag, label: "Splits" },
   { id: "training" as Tab, icon: CalendarDays, label: "Training" },
   { id: "academy" as Tab, icon: BookOpen, label: "Learn" },
+  { id: "nutrition" as Tab, icon: UtensilsCrossed, label: "Nutrition" },
   { id: "profile" as Tab, icon: UserRound, label: "Me" },
 ];
 
@@ -240,6 +242,7 @@ export default function Page() {
                 { id: "splits" as Tab, icon: Flag, label: "Race Splits" },
                 { id: "training" as Tab, icon: CalendarDays, label: "Training Plan" },
                 { id: "academy" as Tab, icon: BookOpen, label: "Running Academy" },
+                { id: "nutrition" as Tab, icon: UtensilsCrossed, label: "Calorie Tracker" },
               ].map(({ id, icon: Icon, label }) => (
                 <button key={id} className="quick-tool" onClick={() => changeTab(id)}>
                   <Icon size={22} strokeWidth={1.8} /><span>{label}</span>
@@ -413,6 +416,8 @@ export default function Page() {
             <p className="small muted">คำแนะนำเพื่อการศึกษาทั่วไป ปรับความหนักตามสมรรถภาพและประวัติสุขภาพ หากมีอาการเจ็บหน้าอก หน้ามืด หรือปวดผิดปกติให้หยุดออกกำลังกายและปรึกษาบุคลากรทางการแพทย์</p>
           </>
         )}
+
+        {tab === "nutrition" && <NutritionTracker />}
 
         {tab === "profile" && (
           <>
