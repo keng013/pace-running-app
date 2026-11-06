@@ -1,11 +1,11 @@
 {
-  "name": "PACE — Running Companion",
-  "short_name": "PACE",
+  "name": "PACE Zone",
+  "short_name": "PACE Zone",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#101b20",
   "theme_color": "#101b20",
-  "description": "Running pace and race strategy companion",
+  "description": "PACE Zone — Running, training and nutrition companion",
   "icons": [
     {
       "src": "/pace-mark.svg",
