@@ -209,7 +209,7 @@ export default function Page() {
             <Image src="/pace-mark.svg" alt="PACE runner logo" width={60} height={60} className="logo-bounce pace-symbol" />
             <span className="pace-wordmark">
               <span className="pace-name">P<span className="lime">A</span>CE</span>
-              <span className="pace-credit">/ KRIT.DEV</span>
+              <span className="pace-credit">Zone</span>
             </span>
           </span>
           <Activity color="#cbfa58" className="pulse-icon" />
